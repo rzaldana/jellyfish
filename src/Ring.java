@@ -1,11 +1,9 @@
 import toxi.physics2d.*;
-import toxi.geom.*;
-import toxi.physics2d.behaviors.*;
 import processing.core.PApplet;
 import java.util.*;
 
 public class Ring {
-	boolean addParticles = true;
+	boolean addParticles = false;
 	float x;
 	float y;
 	float radius;
@@ -24,7 +22,7 @@ public class Ring {
 		sketch = _sketch;
 		particles = new ArrayList<Particle>();
 		springs = new ArrayList<Spring>();
-		strength = (float) 1.1;
+		strength = (float) 0.1;
 		physics = _physics;
 		
 		
@@ -32,7 +30,7 @@ public class Ring {
 			// first calculate distance between arches
 			float arch_d = (radius*2) / (n_arches-1); 
 
-			// add one particle for every arch and two more for boundaries
+			// add one particle for every arch
 			for (int i = 0; i < n_arches; i++) {
 				Particle p = new Particle(x-radius+(arch_d*i), y, sketch);
 				particles.add(p);
@@ -99,7 +97,6 @@ public class Ring {
 			for (int i = 0; i < n_arches; i++) {
 				p2 = particles.get(i);
 				sketch.line(p1.x, p1.y, p2.x, p2.y);
-				PApplet.print("drawing tip\n");
 			}
 		} else if (r.n_arches != n_arches) {
 			/* given that the given ring is not the head
@@ -152,6 +149,30 @@ public class Ring {
 				VerletSpring2D spring = new VerletSpring2D(p1, p2, length, strength);
 				physics.addSpring(spring);
 			}
+		}
+	}
+	
+	public void contract() {
+		PApplet.print("radius before is:", radius, "\n");
+		float c_radius = (float) (radius / (float) 2);					  // contracted radius
+		PApplet.print("Contracted radius is: ", c_radius, "\n");
+		float c_arch_d = (c_radius*2) / (n_arches-1);   // contracted arch_d
+		for (int i= 0; i < particles.size(); i++) {
+			Particle p = particles.get(i);
+			p.lock();
+			p.x = x-c_radius+(c_arch_d*i);
+		}
+	}
+	
+	public void relax() {
+		// return ring to original values
+		float r_radius = (float) radius*((float) 1);		// relaxed radius
+		PApplet.print("Relaxed radius is:", r_radius, "\n");
+		float r_arch_d = (float) (r_radius*2) / (n_arches-1);     // relaxed arch_d
+		for (int i= 0; i < particles.size(); i++) {
+			Particle p = particles.get(i);
+			p.x = x-r_radius+(r_arch_d*i);
+			p.unlock();
 		}
 	}
 }

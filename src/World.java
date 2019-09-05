@@ -1,8 +1,7 @@
 import processing.core.*;
-import java.util.*;
 import toxi.physics2d.*;
 import toxi.geom.*;
-import toxi.physics2d.behaviors.*;
+
 
 public class World extends PApplet {
 
@@ -17,8 +16,8 @@ public class World extends PApplet {
 	public void setup() {
 		physics = new VerletPhysics2D();
 		physics.setWorldBounds(new Rect(0, 0, width, height));
-		physics.addBehavior(new GravityBehavior(new Vec2D((float) 0, (float) 0.05)));
-		b = new Body(width/2, (float) 20, (float) 200, 30, 30, this, physics);
+		//physics.addBehavior(new GravityBehavior(new Vec2D((float) 0, (float) 0.05)));
+		b = new Body(width/2, (float) 20, (float) 200, 50, 50, this, physics);
 		
 		
 	}
@@ -26,7 +25,16 @@ public class World extends PApplet {
 	public void draw() {
 		background(255);
 		physics.update();
+		
 		b.display();
+	}
+	
+	public void mousePressed( ) {
+		b.contract();
+	}
+	
+	public void mouseReleased() {
+		b.relax();
 	}
 	
 	public static void main(String[] args) {

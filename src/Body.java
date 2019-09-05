@@ -1,8 +1,7 @@
 import processing.core.*;
 import java.util.*;
 import toxi.physics2d.*;
-import toxi.geom.*;
-import toxi.physics2d.behaviors.*;
+
 
 public class Body {
 	/* The body is composed of a list of Ring objects and the springs connecting
@@ -50,7 +49,6 @@ public class Body {
 			 * so that all rings fit within a semi-circle
 			 */
 			float ri = (float) Math.sqrt(Math.pow(radius, 2) - Math.pow(radius - yi, 2));
-			PApplet.print("The radius is: ", radius, "\n");
 			
 			Ring r = new Ring(x, y+yi, ri, n_arches, sketch, physics);
 			rings.add(r);
@@ -81,6 +79,17 @@ public class Body {
 			Ring r_prev = rings.get(i-1);
 			r.displayRingConnections(r_prev);
 		}
+		
+	}
+	
+	public void contract() {
+		Ring r = rings.get(rings.size()-10);
+		r.contract();
+	}
+	
+	public void relax() {
+		Ring r = rings.get(rings.size()-10);
+		r.relax();
 	}
 	
 }

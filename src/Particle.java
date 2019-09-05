@@ -1,7 +1,7 @@
 import processing.core.*;
 import toxi.physics2d.*;
 import toxi.geom.*;
-import toxi.physics2d.behaviors.*;
+
 
 public class Particle extends VerletParticle2D{
 
